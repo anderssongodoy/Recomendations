@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de la Categoría</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Detalles de la Categoría</h1>
+    </header>
+    <div class="container">
+        <h2 id="category-title"></h2>
+        <p>Promociones activas:</p>
+        <ul id="promotions-list"></ul>
+        <button onclick="goBack()">Volver</button>
+    </div>
+    <script>
+        // Obtener datos pasados en la URL
+        const params = new URLSearchParams(window.location.search);
+        const category = params.get('category');
+
+        // Mostrar la categoría
+        document.getElementById('category-title').textContent = `Categoría: ${category}`;
+
+        // Simular promociones para la categoría
+        const promotions = [
+            'Descuento 20% en productos seleccionados.',
+            'Compra 2 y lleva 1 gratis.',
+            'Envío gratis en compras mayores a $50.'
+        ];
+
+        // Renderizar promociones
+        const promotionsList = document.getElementById('promotions-list');
+        promotions.forEach(promo => {
+            const li = document.createElement('li');
+            li.textContent = promo;
+            promotionsList.appendChild(li);
+        });
+
+        // Función para volver a la página principal
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>
