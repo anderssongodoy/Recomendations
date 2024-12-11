@@ -8,7 +8,7 @@ async function getRecommendations() {
     }
 
     try {
-        const response = await fetch('/recommendations', {
+        const response = await fetch('http://127.0.0.1:5000/recommendations', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ customer_id: customerID })
@@ -36,7 +36,7 @@ function displayResults(data) {
             categoryDiv.textContent = `Categoría: ${rec.category}`;
 
             const detailsLink = document.createElement('a');
-            detailsLink.href = `/details.html?category=${rec.category}`;
+            detailsLink.href = `/frontend/templates/details.html?category=${rec.category}`;
             detailsLink.textContent = ' Ver detalles';
             detailsLink.style.marginLeft = '10px';
 

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles de la Categoría</title>
-    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/frontend/static/css/styles.css">
 </head>
 <body>
     <header>
@@ -12,6 +12,8 @@
     </header>
     <div class="container">
         <h2 id="category-title"></h2>
+        <p>Productos destacados:</p>
+        <ul id="products-list"></ul>
         <p>Promociones activas:</p>
         <ul id="promotions-list"></ul>
         <button onclick="goBack()">Volver</button>
@@ -24,20 +26,41 @@
         // Mostrar la categoría
         document.getElementById('category-title').textContent = `Categoría: ${category}`;
 
-        // Simular promociones para la categoría
-        const promotions = [
-            'Descuento 20% en productos seleccionados.',
-            'Compra 2 y lleva 1 gratis.',
-            'Envío gratis en compras mayores a $50.'
-        ];
+        // Función para obtener detalles de la categoría
+        async function fetchCategoryDetails(category) {
+            try {
+                const response = await fetch(`http://127.0.0.1:5000/category-details?category=${category}`);
+                if (!response.ok) {
+                    throw new Error('Error al obtener los detalles de la categoría.');
+                }
+                const data = await response.json();
+                displayDetails(data);
+            } catch (error) {
+                alert(`Hubo un problema al cargar los detalles: ${error.message}`);
+            }
+        }
 
-        // Renderizar promociones
-        const promotionsList = document.getElementById('promotions-list');
-        promotions.forEach(promo => {
-            const li = document.createElement('li');
-            li.textContent = promo;
-            promotionsList.appendChild(li);
-        });
+        // Función para renderizar los detalles
+        function displayDetails(data) {
+            // Mostrar productos destacados
+            const productsList = document.getElementById('products-list');
+            data.products.forEach(product => {
+                const li = document.createElement('li');
+                li.textContent = `${product.name} - $${product.price}`;
+                productsList.appendChild(li);
+            });
+
+            // Mostrar promociones
+            const promotionsList = document.getElementById('promotions-list');
+            data.promotions.forEach(promo => {
+                const li = document.createElement('li');
+                li.textContent = promo;
+                promotionsList.appendChild(li);
+            });
+        }
+
+        // Llamar a la función para cargar los detalles
+        fetchCategoryDetails(category);
 
         // Función para volver a la página principal
         function goBack() {
