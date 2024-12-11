@@ -75,7 +75,14 @@ def get_category_details():
         return jsonify({"error": f"No data found for category: {category}"}), 404
 
     # Seleccionar algunos productos de la categoría
-    products = category_products.sample(n=min(5, len(category_products)))[['amount_spent', 'num_purchases']].to_dict(orient='records')
+    products = category_products.sample(n=min(5, len(category_products))).reset_index()
+    product_list = [
+        {
+            "name": f"{category} Producto {i+1}",
+            "price": row['amount_spent']
+        }
+        for i, row in products.iterrows()
+    ]
 
     # Generar promociones relacionadas
     promotions = [
@@ -87,7 +94,7 @@ def get_category_details():
     # Respuesta del endpoint
     return jsonify({
         "category": category,
-        "products": products,
+        "products": product_list,
         "promotions": promotions
     })
 
